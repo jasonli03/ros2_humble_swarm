@@ -3,6 +3,28 @@
     name: "{{ inventory_hostname }}"
   register: container_info
 
+- name: Get running containers
+  community.docker.docker_host_info:
+    containers: true
+  register: running_host_state
+
+- name: Validate exactly one swarm container is running
+  ansible.builtin.assert:
+    that:
+      - swarm_containers == [inventory_hostname]
+    fail_msg: >
+      Expected exactly one running swarm container ({{ inventory_hostname }}),
+      found: {{ swarm_containers | join(', ') | default('none', true) }}.
+      Duplicate containers run duplicate robomaster drivers against the same
+      hardware and corrupt the ROS graph.
+    success_msg: "{{ inventory_hostname }} is the only running swarm container."
+  vars:
+    swarm_containers: >-
+      {{ running_host_state.containers
+         | selectattr('Image', 'search', swarm_image_repo)
+         | map(attribute='Names') | map('first')
+         | map('regex_replace', '^/', '') | sort | list }}
+
 - name: Get local image info
   community.docker.docker_image_info:
     name: "{{ swarm_image }}"

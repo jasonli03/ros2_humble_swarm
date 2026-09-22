@@ -35,7 +35,7 @@ ls ~/.ssh
 # 3) COPY SSH KEY TO ROBOT (FIRST TIME ONLY)
 ############################################################
 
-ssh-copy-id robomaster1@192.168.1.50
+ssh-copy-id robomaster1@192.168.50.104
 # Replace IP if needed
 # This installs your public key on the robot
 
@@ -45,7 +45,7 @@ ssh-copy-id robomaster1@192.168.1.50
 # 4) TEST SSH LOGIN (SHOULD NOT ASK PASSWORD AFTER THIS)
 ############################################################
 
-ssh robomaster1@192.168.1.50
+ssh robomaster1@192.168.50.104
 # If login works without password, SSH key is working
 
 exit
@@ -86,7 +86,7 @@ ansible-playbook -i inventory.ini deploy.yml -K
 # 8) CHECK RUNNING CONTAINER (MANUAL CHECK)
 ############################################################
 
-ssh robomaster1@192.168.1.50
+ssh robomaster1@192.168.50.104
 # Connect to robot
 
 docker ps
@@ -100,7 +100,7 @@ exit
 # 9) IF SSH HOST KEY WARNING APPEARS
 ############################################################
 
-ssh-keygen -R 192.168.1.50
+ssh-keygen -R 192.168.50.104
 # Remove old fingerprint if IP changed
 
 
@@ -109,7 +109,7 @@ ssh-keygen -R 192.168.1.50
 # 10) IF YOU REFLASH ROBOT (SSH BROKEN)
 ############################################################
 
-ssh-copy-id robomaster1@192.168.1.50
+ssh-copy-id robomaster1@192.168.50.104
 # Reinstall SSH key
 
 

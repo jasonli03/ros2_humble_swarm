@@ -1,3 +1,25 @@
+- name: Inspect existing containers
+  community.docker.docker_host_info:
+    containers: true
+    containers_all: true
+  register: docker_host_state
+
+# A second container running the swarm image starts a duplicate robomaster
+# driver against the same hardware and corrupts the ROS graph with duplicate
+# node names. Removed (not just stopped) because restart_policy is "always".
+- name: Remove stray swarm containers
+  community.docker.docker_container:
+    name: "{{ item }}"
+    state: absent
+    force_kill: true
+  loop: "{{ ((docker_host_state.containers
+             | selectattr('Image', 'search', swarm_image_repo)
+             | map(attribute='Names') | map('first')
+             | map('regex_replace', '^/', '') | list)
+            + legacy_container_names)
+           | reject('equalto', inventory_hostname)
+           | unique | list }}"
+
 - name: Create/recreate swarm container
   community.docker.docker_container:
     name: "{{ inventory_hostname }}"

@@ -33,7 +33,9 @@ def load_swarm_config():
     # Pinned robot IPs, same order as robot_names. Leave "" to fall back to
     # SN broadcast discovery (UDP 40927), which only works on a network that
     # forwards broadcast to the host.
-    robot_ips = ["","", "", "192.168.1.154", "192.168.1.5", "192.168.1.6"]
+    # Reserved scheme on the RT-BE58U (192.168.50.0/24): RMn -> 192.168.50.(150+n).
+    # Fill an entry in only once that robot has a DHCP reservation on the router.
+    robot_ips = ["", "", "", "", "", ""]
 
     env_ips = os.getenv('ROBOT_IPS')
     if env_ips:
@@ -43,7 +45,7 @@ def load_swarm_config():
 
     # initial angles for orientation propagation. should be in degree,
     # although it will be converted to radians
-    init_orientations = [90.0, 0.0, 0.0, 90.0, 0.0, 0.0]
+    init_orientations = [90.0, 0.0, 0.0, 0.0, 0.0, 0.0]
 
 
 

@@ -1,4 +1,10 @@
 swarm_image: "elghaliasri/ros2-humble-swarm:robot-arm64-v9.1.2"
+swarm_image_repo: "elghaliasri/ros2-humble-swarm"
+
+# Container names used by older revisions of this playbook. Removed on deploy so
+# they cannot run a second ROS stack alongside "{{ inventory_hostname }}".
+legacy_container_names:
+  - swarm
 
 remote_config_dir: /opt/robomaster/config
 container_config_dir: /ros2_ws/src/swarm_bringup/config
